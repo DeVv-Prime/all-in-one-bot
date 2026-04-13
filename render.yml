@@ -1,0 +1,21 @@
+services:
+  - type: worker
+    name: ultimate-discord-bot
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DATABASE_URL
+        value: "sqlite:///bot_database.db"
+    autoDeploy: true
+    plan: free
+    region: oregon
+    healthCheckPath: /
+    disk:
+      name: bot-data
+      mountPath: /data
+      sizeGB: 1
