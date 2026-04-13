@@ -6,19 +6,19 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     git \
+    gcc \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
+# Upgrade pip
+RUN pip install --upgrade pip setuptools wheel
 
-# Install Python dependencies
+# Copy and install requirements
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy bot files
 COPY . .
-
-# Create data directory
-RUN mkdir -p /data
 
 # Run bot
 CMD ["python", "main.py"]
