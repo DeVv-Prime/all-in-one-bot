@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: discord-bot
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+      - ./logs:/app/logs
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DATABASE_URL=sqlite:////data/bot_database.db
+    networks:
+      - bot-network
+
+  lavalink:
+    image: fredboat/lavalink:latest
+    container_name: lavalink
+    restart: unless-stopped
+    ports:
+      - "2333:2333"
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml
+    networks:
+      - bot-network
+
+networks:
+  bot-network:
+    driver: bridge
